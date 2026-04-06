@@ -6,7 +6,7 @@ const App = () => {
   const [products, setProducts] = useState([]);
   const [cart, setCart] = useState([]);
   const [view, setView] = useState('products'); 
-
+  
   useEffect(() => {
     fetch('products.json')
       .then(res => res.json())

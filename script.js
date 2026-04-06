@@ -6,7 +6,7 @@ fetch('./products.json')
     .then(res => res.json())
     .then(data => {
         products = data;
-        renderProducts();
+        renderProducts();  
     });
 
 function renderProducts() {
