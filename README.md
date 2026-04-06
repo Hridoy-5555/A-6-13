@@ -20,4 +20,4 @@ DigiTools is a premium digital marketplace designed for creators and developers.
 3. Run `npm start` or `npm run dev` to launch the application.
 
 ## 📄 Credits
-Images and icons provided by Icons8. UI components built with DaisyUI.
+Images and icons provided by Icons8. UI components built with DaisyUI.  
