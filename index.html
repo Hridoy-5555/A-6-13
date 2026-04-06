@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DigiTools</title>
+
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+<style>
+  .gradient {
+    background: linear-gradient(90deg, #6d28d9, #9333ea);
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .animate-fade-in-up {
+    animation: fadeInUp 0.8s ease-out forwards;
+  }
+  .delay-200 { animation-delay: 0.2s; opacity: 0; }
+  .delay-400 { animation-delay: 0.4s; opacity: 0; }
+</style>
+
+</head>
+
+<body class="bg-gray-100">
+
+
+<div class="flex justify-between items-center px-[200px] py-4 bg-white shadow">
+  <h1 class="text-[48px] font-bold text-purple-600">DigiTools</h1>
+  <nav class="hidden md:flex space-x-8 text-gray-600 font-medium">
+    <a href="#" onclick="showProducts()" class="hover:text-purple-600 transition">Products</a>
+    <a href="#features" class="hover:text-purple-600 transition">Features</a>
+    <a href="#pricing" class="hover:text-purple-600 transition">Pricing</a>
+    <a href="#testimonials" class="hover:text-purple-600 transition">Testimonials</a>
+    <a href="#faq" class="hover:text-purple-600 transition">FAQ</a>
+  </nav>
+  <div class="flex items-center gap-3">
+    <button onclick="showCart()" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 transition-colors duration-300">
+      <i class="fa-solid fa-cart-shopping mr-2"></i>Cart (<span id="cartCount">0</span>)
+    </button>
+    <button class="bg-gray-900 text-white px-4 py-2 rounded hover:bg-black transition-colors duration-300">Get Started</button>
+  </div>
+</div>
+
+
+<section class="flex flex-col md:flex-row items-center justify-between px-[200px] py-12 bg-white">
+  <div class="animate-fade-in-up">
+    <div class="inline-flex items-center bg-purple-100 text-purple-700 text-sm font-medium px-4 py-1.5 rounded-full mb-6">
+      <span class="bg-purple-600 text-white text-xs font-bold px-2 py-0.5 rounded-full mr-3 uppercase">New</span>
+      <i class="fa-solid fa-chart-line mr-2 text-xs"></i>
+      <span class="relative flex h-2 w-2 mr-2">
+        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
+        <span class="relative inline-flex rounded-full h-2 w-2 bg-purple-500"></span>
+      </span>
+      AI-Powered Tools Available
+    </div>
+    <h1 class="text-[48px] font-bold mb-4 leading-tight">Supercharge Your <br> Digital Workflow</h1>
+    <p class="mb-4 text-gray-600">Access premium AI tools, design assets, templates, and productivity <br>
+software—all in one place. Start creating faster today.</p>
+    <div class="flex gap-4">
+      <button onclick="showProducts()" class="bg-purple-600 text-white px-6 py-2.5 rounded-xl shadow-md font-semibold hover:bg-purple-700 transition transform hover:-translate-y-1">
+        Explore Products
+      </button>
+      <button class="bg-white text-gray-900 px-6 py-2.5 rounded-xl shadow-md flex items-center font-semibold border border-gray-200 hover:bg-gray-50 transition transform hover:-translate-y-1">
+        <i class="fa-solid fa-circle-play text-purple-600 mr-2 text-xl"></i> Watch Demo
+      </button>
+    </div>
+  </div>
+  <div class="relative mt-6 md:mt-0 animate-fade-in-up delay-200">
+    <img src="assets/banner.png" alt="Digital Workflow Banner" class="w-[500px] h-[590px] object-cover rounded-2xl shadow-lg">
+  </div>
+</section>
+
+
+<div class="gradient text-white text-center grid grid-cols-3 py-6 px-[200px]">
+  <div><h2 class="text-[48px] font-bold">50K+</h2><p>Active Users</p></div>
+  <div><h2 class="text-[48px] font-bold">200+</h2><p>Tools</p></div>
+  <div><h2 class="text-[48px] font-bold">4.9</h2><p>Rating</p></div>
+</div>
+
+
+<div class="text-center my-6 px-[200px]">
+  <button onclick="showProducts()" class="bg-purple-600 text-white px-4 py-2 rounded mx-2 hover:bg-purple-700 transition-colors duration-300">Products</button>
+  <button onclick="showCart()" class="bg-gray-800 text-white px-4 py-2 rounded mx-2 hover:bg-gray-900 transition-colors duration-300">Cart</button>
+</div>
+
+
+<div id="productsSection" class="grid md:grid-cols-3 gap-6 px-[200px]"></div>
+
+
+<div id="cartSection" class="hidden max-w-xl mx-auto bg-white p-8 shadow-2xl rounded-2xl">
+  <h2 class="text-xl font-bold mb-4">Your Cart</h2>
+  <div id="cartItems" class="flex flex-col gap-3"></div>
+  <h3 class="mt-6 text-lg font-bold border-t pt-4 flex justify-between">Total: <span>$<span id="total">0</span></span></h3>
+  <button onclick="checkout()" class="gradient text-white w-full mt-4 py-2 rounded hover:opacity-90 transition-all duration-300 transform hover:scale-[1.02]">
+    Proceed to Checkout
+  </button>
+</div>
+
+
+<section class="text-center py-12 px-[200px]">
+  <h2 class="text-2xl font-bold mb-6">Get Started in 3 Steps</h2>
+  <div class="grid md:grid-cols-3 gap-6 px-10">
+    <div class="bg-white p-6 shadow rounded transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
+      <i class="fa-solid fa-user-plus text-3xl text-purple-600 mb-3 block"></i>
+      <span class="font-semibold">Create Account</span>
+    </div>
+    <div class="bg-white p-6 shadow rounded transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
+      <i class="fa-solid fa-layer-group text-3xl text-purple-600 mb-3 block"></i>
+      <span class="font-semibold">Choose Products</span>
+    </div>
+    <div class="bg-white p-6 shadow rounded transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
+      <i class="fa-solid fa-rocket text-3xl text-purple-600 mb-3 block"></i>
+      <span class="font-semibold">Start Using</span>
+    </div>
+  </div>
+</section>
+
+
+<section id="pricing" class="text-center py-12 bg-white px-[200px]">
+  <h2 class="text-2xl font-bold mb-6">Simple Pricing</h2>
+  <div class="grid md:grid-cols-3 gap-6 px-10">
+
+    <div class="border p-6 rounded-3xl flex flex-col transition-all duration-300 hover:shadow-lg hover:border-purple-200">
+      <h3 class="text-xl font-bold">Starter</h3>
+      <p class="text-3xl font-bold my-2">$0</p>
+      <ul class="text-left text-gray-600 mb-6 space-y-2 flex-grow">
+        <li><i class="fa-solid fa-check text-purple-600 mr-2"></i>5 Basic Projects</li>
+        <li><i class="fa-solid fa-check text-purple-600 mr-2"></i>Community Support</li>
+        <li><i class="fa-solid fa-check text-purple-600 mr-2"></i>Basic AI Access</li>
+      </ul>
+      <button class="bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700 transition">Start Free</button>
+    </div>
+
+    <div class="border p-6 rounded-3xl bg-purple-600 text-white flex flex-col shadow-xl scale-105 transition-all duration-300 hover:scale-110">
+      <h3 class="text-xl font-bold">Pro</h3>
+      <p class="text-3xl font-bold my-2">$29</p>
+      <ul class="text-left mb-6 space-y-2 flex-grow">
+        <li><i class="fa-solid fa-check mr-2"></i>Unlimited Projects</li>
+        <li><i class="fa-solid fa-check mr-2"></i>Priority Email Support</li>
+        <li><i class="fa-solid fa-check mr-2"></i>Advanced AI Tools</li>
+        <li><i class="fa-solid fa-check mr-2"></i>Custom Templates</li>
+      </ul>
+      <button class="bg-white text-purple-600 px-4 py-2 rounded font-bold hover:bg-gray-100 transition">Get Pro</button>
+    </div>
+
+    <div class="border p-6 rounded-3xl flex flex-col transition-all duration-300 hover:shadow-lg hover:border-purple-200">
+      <h3 class="text-xl font-bold">Enterprise</h3>
+      <p class="text-3xl font-bold my-2">$99</p>
+      <ul class="text-left text-gray-600 mb-6 space-y-2 flex-grow">
+        <li><i class="fa-solid fa-check text-purple-600 mr-2"></i>Custom API Access</li>
+        <li><i class="fa-solid fa-check text-purple-600 mr-2"></i>Dedicated Manager</li>
+        <li><i class="fa-solid fa-check text-purple-600 mr-2"></i>24/7 Phone Support</li>
+      </ul>
+      <button class="bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700 transition">Contact Sales</button>
+    </div>
+
+  </div>
+</section>
+
+
+<footer class="bg-gray-900 text-white py-12 px-[200px]">
+  <div class="grid md:grid-cols-4 gap-12 text-left mb-10">
+    <div>
+      <h2 class="text-[48px] font-bold text-purple-400 mb-4">DigiTools</h2>
+      <p class="text-gray-400 text-sm leading-relaxed">
+        Premium digital tools for creators, professionals, and businesses. Work smarter with our suite of powerful tools.
+      </p>
+      <div class="flex gap-4 mt-6">
+        <a href="#" class="text-gray-400 hover:text-purple-400 transition text-xl"><i class="fa-brands fa-facebook"></i></a>
+        <a href="#" class="text-gray-400 hover:text-purple-400 transition text-xl"><i class="fa-brands fa-twitter"></i></a>
+        <a href="#" class="text-gray-400 hover:text-purple-400 transition text-xl"><i class="fa-brands fa-instagram"></i></a>
+        <a href="#" class="text-gray-400 hover:text-purple-400 transition text-xl"><i class="fa-brands fa-linkedin"></i></a>
+      </div>
+    </div>
+    <div>
+      <h3 class="font-bold text-lg mb-4">Product</h3>
+      <ul class="text-gray-400 space-y-2 text-sm">
+        <li><a href="#" class="hover:text-white transition">Features</a></li>
+        <li><a href="#" class="hover:text-white transition">Pricing</a></li>
+        <li><a href="#" class="hover:text-white transition">Marketplace</a></li>
+      </ul>
+    </div>
+    <div>
+      <h3 class="font-bold text-lg mb-4">Company</h3>
+      <ul class="text-gray-400 space-y-2 text-sm">
+        <li><a href="#" class="hover:text-white transition">About Us</a></li>
+        <li><a href="#" class="hover:text-white transition">Careers</a></li>
+        <li><a href="#" class="hover:text-white transition">Contact</a></li>
+      </ul>
+    </div>
+    <div>
+      <h3 class="font-bold text-lg mb-4">Resources</h3>
+      <ul class="text-gray-400 space-y-2 text-sm">
+        <li><a href="#" class="hover:text-white transition">Documentation</a></li>
+        <li><a href="#" class="hover:text-white transition">Help Center</a></li>
+        <li><a href="#" class="hover:text-white transition">Community</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="border-t border-gray-800 pt-8 text-center text-gray-500 text-sm">
+    DigiTools © 2026. All rights reserved.
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+<script>
+const products = [
+  {id:1,name:"AI Writing Pro",price:29,period:"monthly",icon:"fa-solid fa-pen-nib",features:["SEO","Unlimited"]},
+  {id:2,name:"Design Pack",price:49,period:"one-time",icon:"fa-solid fa-palette",features:["Templates","Responsive"]},
+  {id:3,name:"Resume Builder",price:19,period:"monthly",icon:"fa-solid fa-file-lines",features:["PDF","ATS"]},
+  {id:4,name:"Automation Tool",price:59,period:"yearly",icon:"fa-solid fa-gears",features:["API","No Code"]},
+  {id:5,name:"Social Kit",price:39,period:"monthly",icon:"fa-solid fa-share-nodes",features:["Analytics","Scheduler"]},
+  {id:6,name:"Ebook Creator",price:25,period:"one-time",icon:"fa-solid fa-book",features:["Export","Layout"]}
+];
+
+let cart=[];
+
+function loadProducts(){
+  const container=document.getElementById("productsSection");
+  container.innerHTML="";
+
+  products.forEach(p=>{
+    container.innerHTML+=`
+    <div class="bg-white p-5 rounded shadow transition-all duration-300 hover:shadow-2xl hover:-translate-y-2">
+      <i class="${p.icon} text-4xl text-purple-600 mb-4 block"></i>
+      <h2 class="text-lg font-bold">${p.name}</h2>
+      <p class="text-gray-500">$${p.price} / ${p.period}</p>
+      <ul class="text-sm my-2">
+        ${p.features.map(f=>`<li>✔ ${f}</li>`).join("")}
+      </ul>
+      <button onclick="addToCart(${p.id})" class="gradient text-white w-full py-2 rounded hover:opacity-90 transition-all duration-300 transform hover:scale-[1.02]">
+        <i class="fa-solid fa-cart-plus mr-2"></i>Buy Now
+      </button>
+    </div>
+    `;
+  });
+}
+
+function addToCart(id){
+  cart.push(products.find(p=>p.id===id));
+  updateCart();
+  Toastify({text:"Added to cart",duration:2000,backgroundColor:"green"}).showToast();
+}
+
+function removeItem(i){
+  cart.splice(i,1);
+  updateCart();
+  Toastify({text:"Removed",backgroundColor:"red"}).showToast();
+}
+
+function updateCart(){
+  document.getElementById("cartCount").innerText=cart.length;
+  let total=0;
+  const cartItems=document.getElementById("cartItems");
+  cartItems.innerHTML="";
+
+  cart.forEach((item,i)=>{
+    total+=item.price;
+    cartItems.innerHTML+=`
+    <div class="flex justify-between items-center border-b pb-2">
+      <div class="flex items-center">
+        <i class="${item.icon} text-lg text-purple-600 w-8"></i>
+        <span class="font-medium">${item.name}</span>
+      </div>
+      <div class="flex items-center gap-4">
+        <span class="text-gray-600">$${item.price}</span>
+        <button onclick="removeItem(${i})" class="text-red-500 hover:text-red-700 transition-colors p-1">
+          <i class="fa-solid fa-trash-can"></i>
+        </button>
+      </div>
+    </div>`;
+  });
+
+  document.getElementById("total").innerText=total;
+}
+
+function checkout(){
+  cart=[];
+  updateCart();
+  Toastify({text:"Checkout Done",backgroundColor:"blue"}).showToast();
+}
+
+function showCart(){
+  document.getElementById("productsSection").classList.add("hidden");
+  document.getElementById("cartSection").classList.remove("hidden");
+}
+
+function showProducts(){
+  document.getElementById("cartSection").classList.add("hidden");
+  document.getElementById("productsSection").classList.remove("hidden");
+}
+
+loadProducts();
+</script>
+
+</body>
+</html>

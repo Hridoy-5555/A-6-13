@@ -1,0 +1,68 @@
+[
+    {
+        "id": 1,
+        "name": "AI Content Writer",
+        "description": "Generate high-quality blog posts and social media captions in seconds.",
+        "price": 29.99,
+        "period": "monthly",
+        "tag": "Best Seller",
+        "tagType": "best seller",
+        "features": ["Unlimited AI Words", "Plagiarism Checker", "SEO Optimizer"],
+        "icon": "https://img.icons8.com/fluency/48/edit--v1.png"
+    },
+    {
+        "id": 2,
+        "name": "Design Assets Bundle",
+        "description": "Access thousands of premium icons, 3D illustrations, and UI kits.",
+        "price": 149.00,
+        "period": "one-time",
+        "tag": "New",
+        "tagType": "new",
+        "features": ["Commercial License", "Daily Updates", "Source Files Included"],
+        "icon": "https://img.icons8.com/fluency/48/layers.png"
+    },
+    {
+        "id": 3,
+        "name": "SEO Audit Master",
+        "description": "Deep dive into your website performance with real-time technical SEO tracking.",
+        "price": 59.99,
+        "period": "monthly",
+        "tag": "Popular",
+        "tagType": "popular",
+        "features": ["Backlink Analysis", "Keyword Ranking", "Competitor Tracking"],
+        "icon": "https://img.icons8.com/fluency/48/area-chart.png"
+    },
+    {
+        "id": 4,
+        "name": "Code Snippet Manager",
+        "description": "Cloud-based storage for all your reusable components and code snippets.",
+        "price": 9.99,
+        "period": "monthly",
+        "tag": "Productivity",
+        "tagType": "popular",
+        "features": ["VS Code Integration", "Team Sharing", "Encrypted Storage"],
+        "icon": "https://img.icons8.com/fluency/48/code.png"
+    },
+    {
+        "id": 5,
+        "name": "Video Editor Pro",
+        "description": "Browser-based video editor with AI-powered transitions and subtitling.",
+        "price": 199.00,
+        "period": "yearly",
+        "tag": "New",
+        "tagType": "new",
+        "features": ["4K Export", "Stock Footage Library", "AI Voiceover"],
+        "icon": "https://img.icons8.com/fluency/48/video-file.png"
+    },
+    {
+        "id": 6,
+        "name": "Task Automator",
+        "description": "Connect your favorite apps and automate repetitive workflows easily.",
+        "price": 0.00,
+        "period": "monthly",
+        "tag": "Free Tier",
+        "tagType": "popular",
+        "features": ["5 Automations", "Webhooks Support", "24/7 Monitoring"],
+        "icon": "https://img.icons8.com/fluency/48/workflow.png"
+    }
+]
