@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-// Sub-component for individual product cards
+// Reusable Product Card Component
 const ProductCard = ({ product, isInCart, onAddToCart }) => (
-  <div className="card h-full bg-base-100 shadow-xl border border-gray-100 hover:scale-105 hover:shadow-[0_0_25px_rgba(126,34,206,0.4)] hover:border-primary transition-all duration-300">
+  <div className="card h-full bg-base-100 shadow-xl border border-gray-100 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
     <figure className="px-10 pt-10">
-      <img src={product.icon} alt={product.name} className="rounded-xl w-16" />
+      <img src={product.icon} alt={product.name} className="w-16 h-16 object-contain" />
     </figure>
     <div className="card-body flex flex-col h-full">
       <div className="flex justify-between items-start">
@@ -22,7 +22,7 @@ const ProductCard = ({ product, isInCart, onAddToCart }) => (
       <p className="text-sm text-gray-500">{product.description}</p>
       <div className="divider my-1"></div>
       <ul className="text-xs space-y-2 text-gray-600">
-        {product.features.map((f, i) => (
+        {product.features?.map((f, i) => (
           <li key={i} className="flex items-center gap-2">✅ {f}</li>
         ))}
       </ul>
@@ -33,7 +33,7 @@ const ProductCard = ({ product, isInCart, onAddToCart }) => (
       <div className="card-actions mt-auto pt-4">
         {isInCart ? (
           <button className="btn btn-disabled w-full bg-gray-100 text-gray-400">
-            Added to Cart
+            ✓ Added to Cart
           </button>
         ) : (
           <button 
@@ -52,22 +52,24 @@ const ProductCard = ({ product, isInCart, onAddToCart }) => (
 const CartItem = ({ item, onRemove }) => (
   <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border">
     <div className="flex items-center gap-4">
-      <img src={item.icon} alt="" className="w-10" />
+      <img src={item.icon} alt="" className="w-10 h-10" />
       <div>
         <h3 className="font-semibold">{item.name}</h3>
-        <p className="text-xs text-gray-500">${item.price}</p>
+        <p className="text-xs text-gray-500">${Number(item.price).toFixed(2)}</p>
       </div>
     </div>
-    <button 
-      className="btn btn-sm btn-circle btn-outline btn-error" 
-      onClick={() => onRemove(item.id)}
-    >
-      ✕
-    </button>
+    <div className="tooltip tooltip-left" data-tip="Remove item">
+      <button 
+        className="btn btn-sm btn-circle btn-outline btn-error" 
+        onClick={() => onRemove(item.id)}
+      >
+        ✕
+      </button>
+    </div>
   </div>
 );
 
-// Section components for better readability
+// Section: Stats
 const StatsSection = () => (
   <section className="my-12 mx-4 lg:mx-52">
     <div className="stats shadow w-full bg-primary text-primary-content">
@@ -90,18 +92,34 @@ const StatsSection = () => (
   </section>
 );
 
+// Section: How It Works (Steps)
 const HowItWorks = () => (
   <section className="bg-white py-20 mx-4 lg:mx-52 rounded-3xl">
     <div className="max-w-4xl mx-auto text-center">
       <h2 className="text-3xl font-bold mb-12">How It Works</h2>
       <ul className="steps steps-vertical lg:steps-horizontal w-full">
-        <li className="step step-primary">Choose Tool</li>
-        <li className="step step-primary">Add to Cart</li>
-        <li className="step">Checkout</li>
-        <li className="step">Instant Access</li>
+        <li className="step step-primary font-medium">Browse Tools</li>
+        <li className="step step-primary font-medium">Add to Selection</li>
+        <li className="step font-medium">Secure Checkout</li>
+        <li className="step font-medium">Instant Access</li>
       </ul>
     </div>
   </section>
+);
+
+// Section: Pricing
+const PriceCard = ({ title, price, features, isPopular }) => (
+  <div className={`p-8 border ${isPopular ? 'border-primary border-2 relative' : 'border-gray-200'} rounded-2xl flex flex-col items-center bg-white shadow-sm`}>
+    {isPopular && <div className="badge badge-primary absolute -top-3">Most Popular</div>}
+    <h3 className="text-xl font-bold">{title}</h3>
+    <p className="text-4xl font-bold my-4">${price}<span className="text-lg font-normal text-gray-400">/mo</span></p>
+    <ul className="space-y-3 mb-8 text-gray-600 flex-grow text-center">
+      {features.map((f, i) => <li key={i}>{f}</li>)}
+    </ul>
+    <button className={`btn ${isPopular ? 'btn-primary' : 'btn-outline'} btn-block`}>
+      {price === 0 ? 'Get Started' : 'Subscribe Now'}
+    </button>
+  </div>
 );
 
 const App = () => {
@@ -110,7 +128,7 @@ const App = () => {
   const [view, setView] = useState('products'); 
   
   useEffect(() => {
-    fetch('products.json')
+    fetch('./products.json')
       .then(res => res.json())
       .then(data => {
         setProducts(data);
@@ -173,14 +191,14 @@ const App = () => {
 
       <header className="hero bg-base-200 py-16 mx-4 lg:mx-52 w-auto rounded-3xl mt-8">
         <div className="hero-content flex-col lg:flex-row-reverse">
-          <img src="./assets/banner.png" className="max-w-sm rounded-lg shadow-2xl" alt="Banner" />
+          <img src="assets/banner.png" className="max-w-sm rounded-lg shadow-2xl" alt="Banner" />
           <div>
-            <span className="text-sm font-semibold text-primary uppercase tracking-widest">New: AI-Powered Tools Available</span>
+            <span className="badge badge-primary gap-2 p-4">New: AI-Powered Tools Available</span>
             <h1 className="text-5xl font-bold mt-2">Supercharge Your Digital Workflow</h1>
             <p className="py-6 text-gray-600">Access premium AI tools, design assets, and productivity software—all in one place. Start creating faster today.</p>
             <div className="flex gap-4">
               <button className="btn btn-primary" onClick={() => setView('products')}>Explore Products</button>
-              <button className="btn btn-outline">Watch Demo</button>
+              <button className="btn btn-ghost border-gray-300">Watch Demo</button>
             </div>
           </div>
         </div>
@@ -224,7 +242,7 @@ const App = () => {
           <div className="max-w-2xl mx-auto bg-white p-8 rounded-2xl shadow-sm border">
             <h2 className="text-3xl font-bold mb-6">Your Selected Products</h2>
             {cart.length === 0 ? (
-              <div className="text-center py-12">
+              <div className="text-center py-16">
                 <p className="text-gray-400 text-lg mb-4">Your cart is empty.</p>
                 <button className="btn btn-ghost text-primary" onClick={() => setView('products')}>Go Back to Products</button>
               </div>
@@ -242,7 +260,9 @@ const App = () => {
                   <span>Total:</span>
                   <span>${totalPrice}</span>
                 </div>
-                <button className="btn btn-success w-full mt-6 text-white" onClick={handleCheckout}>Proceed to Checkout</button>
+                <button className="btn btn-success w-full mt-6 text-white text-lg" onClick={handleCheckout}>
+                  Proceed to Checkout
+                </button>
               </div>
             )}
           </div>
@@ -253,35 +273,19 @@ const App = () => {
 
       <section className="py-20 mx-4 lg:mx-52">
         <h2 className="text-3xl font-bold text-center mb-12">Simple Pricing Plans</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="p-8 border rounded-2xl flex flex-col items-center">
-            <h3 className="text-xl font-bold">Starter</h3>
-            <p className="text-4xl font-bold my-4">$0<span className="text-lg font-normal">/mo</span></p>
-            <ul className="space-y-2 mb-6 text-gray-600">
-              <li>Single User</li>
-              <li>Standard Tools</li>
-            </ul>
-            <button className="btn btn-outline btn-block">Get Started</button>
-          </div>
-          <div className="p-8 border-2 border-primary rounded-2xl flex flex-col items-center relative">
-            <div className="badge badge-primary absolute -top-3">Most Popular</div>
-            <h3 className="text-xl font-bold">Professional</h3>
-            <p className="text-4xl font-bold my-4">$49<span className="text-lg font-normal">/mo</span></p>
-            <ul className="space-y-2 mb-6 text-gray-600">
-              <li>Up to 5 Users</li>
-              <li>Premium AI Tools</li>
-            </ul>
-            <button className="btn btn-primary btn-block">Go Pro</button>
-          </div>
-          <div className="p-8 border rounded-2xl flex flex-col items-center">
-            <h3 className="text-xl font-bold">Enterprise</h3>
-            <p className="text-4xl font-bold my-4">$99<span className="text-lg font-normal">/mo</span></p>
-            <ul className="space-y-2 mb-6 text-gray-600">
-              <li>Unlimited Users</li>
-              <li>Priority Support</li>
-            </ul>
-            <button className="btn btn-outline btn-block">Contact Sales</button>
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <PriceCard 
+            title="Starter" price={0} 
+            features={["Single User", "Standard Tools", "Community Support"]} 
+          />
+          <PriceCard 
+            title="Professional" price={49} isPopular 
+            features={["Up to 5 Users", "Premium AI Tools", "Priority Support"]} 
+          />
+          <PriceCard 
+            title="Enterprise" price={99} 
+            features={["Unlimited Users", "Custom Workflows", "Dedicated Manager"]} 
+          />
         </div>
       </section>
 
