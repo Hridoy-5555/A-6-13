@@ -2,6 +2,108 @@ import React, { useState, useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+// Sub-component for individual product cards
+const ProductCard = ({ product, isInCart, onAddToCart }) => (
+  <div className="card h-full bg-base-100 shadow-xl border border-gray-100 hover:scale-105 hover:shadow-[0_0_25px_rgba(126,34,206,0.4)] hover:border-primary transition-all duration-300">
+    <figure className="px-10 pt-10">
+      <img src={product.icon} alt={product.name} className="rounded-xl w-16" />
+    </figure>
+    <div className="card-body flex flex-col h-full">
+      <div className="flex justify-between items-start">
+        <h2 className="card-title text-xl">{product.name}</h2>
+        <div className={`badge ${
+          product.tagType === 'new' ? 'badge-secondary' : 
+          product.tagType === 'best seller' ? 'badge-accent' : 
+          'badge-primary'
+        } badge-outline uppercase text-[10px] font-bold`}>
+          {product.tag}
+        </div>
+      </div>
+      <p className="text-sm text-gray-500">{product.description}</p>
+      <div className="divider my-1"></div>
+      <ul className="text-xs space-y-2 text-gray-600">
+        {product.features.map((f, i) => (
+          <li key={i} className="flex items-center gap-2">✅ {f}</li>
+        ))}
+      </ul>
+      <div className="mt-4">
+        <span className="text-2xl font-bold">${product.price}</span>
+        <span className="text-gray-400 text-sm"> / {product.period}</span>
+      </div>
+      <div className="card-actions mt-auto pt-4">
+        {isInCart ? (
+          <button className="btn btn-disabled w-full bg-gray-100 text-gray-400">
+            Added to Cart
+          </button>
+        ) : (
+          <button 
+            className="btn btn-primary w-full text-white" 
+            onClick={() => onAddToCart(product)}
+          >
+            Buy Now
+          </button>
+        )}
+      </div>
+    </div>
+  </div>
+);
+
+// Sub-component for items within the cart
+const CartItem = ({ item, onRemove }) => (
+  <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border">
+    <div className="flex items-center gap-4">
+      <img src={item.icon} alt="" className="w-10" />
+      <div>
+        <h3 className="font-semibold">{item.name}</h3>
+        <p className="text-xs text-gray-500">${item.price}</p>
+      </div>
+    </div>
+    <button 
+      className="btn btn-sm btn-circle btn-outline btn-error" 
+      onClick={() => onRemove(item.id)}
+    >
+      ✕
+    </button>
+  </div>
+);
+
+// Section components for better readability
+const StatsSection = () => (
+  <section className="my-12 mx-4 lg:mx-52">
+    <div className="stats shadow w-full bg-primary text-primary-content">
+      <div className="stat place-items-center">
+        <div className="stat-title text-blue-100">Downloads</div>
+        <div className="stat-value">31K</div>
+        <div className="stat-desc text-blue-100">Jan 1st - Oct 1st</div>
+      </div>
+      <div className="stat place-items-center">
+        <div className="stat-title text-blue-100">Active Users</div>
+        <div className="stat-value text-secondary">4,200</div>
+        <div className="stat-desc text-secondary">↗︎ 40 (2%)</div>
+      </div>
+      <div className="stat place-items-center">
+        <div className="stat-title text-blue-100">New Registers</div>
+        <div className="stat-value">1,200</div>
+        <div className="stat-desc text-blue-100">↘︎ 90 (14%)</div>
+      </div>
+    </div>
+  </section>
+);
+
+const HowItWorks = () => (
+  <section className="bg-white py-20 mx-4 lg:mx-52 rounded-3xl">
+    <div className="max-w-4xl mx-auto text-center">
+      <h2 className="text-3xl font-bold mb-12">How It Works</h2>
+      <ul className="steps steps-vertical lg:steps-horizontal w-full">
+        <li className="step step-primary">Choose Tool</li>
+        <li className="step step-primary">Add to Cart</li>
+        <li className="step">Checkout</li>
+        <li className="step">Instant Access</li>
+      </ul>
+    </div>
+  </section>
+);
+
 const App = () => {
   const [products, setProducts] = useState([]);
   const [cart, setCart] = useState([]);
@@ -11,7 +113,7 @@ const App = () => {
     fetch('products.json')
       .then(res => res.json())
       .then(data => {
-        setProducts(Array.isArray(data) ? data : []);
+        setProducts(data);
       })
       .catch(err => {
         toast.error("Failed to load products. Ensure you are using a local server.");
@@ -41,12 +143,11 @@ const App = () => {
     toast.success("Order placed successfully! Cart cleared.");
   };
 
-  const totalPrice = cart.reduce((sum, item) => sum + item.price, 0).toFixed(2);
+  const totalPrice = cart.reduce((sum, item) => sum + Number(item.price), 0).toFixed(2);
 
   return (
     <div className="min-h-screen bg-gray-50 font-sans">
       <ToastContainer position="top-right" autoClose={2000} />
-      
       
       <nav className="navbar bg-base-100 shadow-md sticky top-4 z-50 rounded-xl mx-4 lg:mx-52 w-auto">
         <div className="flex-1">
@@ -70,7 +171,6 @@ const App = () => {
         </div>
       </nav>
 
-      
       <header className="hero bg-base-200 py-16 mx-4 lg:mx-52 w-auto rounded-3xl mt-8">
         <div className="hero-content flex-col lg:flex-row-reverse">
           <img src="./assets/banner.png" className="max-w-sm rounded-lg shadow-2xl" alt="Banner" />
@@ -86,29 +186,9 @@ const App = () => {
         </div>
       </header>
 
-      
-      <section className="my-12 mx-4 lg:mx-52">
-        <div className="stats shadow w-full bg-primary text-primary-content">
-          <div className="stat place-items-center">
-            <div className="stat-title text-blue-100">Downloads</div>
-            <div className="stat-value">31K</div>
-            <div className="stat-desc text-blue-100">Jan 1st - Oct 1st</div>
-          </div>
-          <div className="stat place-items-center">
-            <div className="stat-title text-blue-100">Active Users</div>
-            <div className="stat-value text-secondary">4,200</div>
-            <div className="stat-desc text-secondary">↗︎ 40 (2%)</div>
-          </div>
-          <div className="stat place-items-center">
-            <div className="stat-title text-blue-100">New Registers</div>
-            <div className="stat-value">1,200</div>
-            <div className="stat-desc text-blue-100">↘︎ 90 (14%)</div>
-          </div>
-        </div>
-      </section>
+      <StatsSection />
 
-      
-      <main className="py-12 mx-4 lg:mx-52">
+      <main className="py-12 mx-4 lg:mx-52 min-h-[400px]">
         <div className="text-center mb-8">
           <h2 className="text-4xl font-bold mb-2">Our Digital Toolbox</h2>
           <p className="text-gray-500">Choose the best tools for your next big project.</p>
@@ -132,46 +212,12 @@ const App = () => {
         {view === 'products' ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {products.map(product => (
-              <div 
-                key={product.id} 
-                className="card h-full bg-base-100 shadow-xl border border-gray-100 hover:scale-105 hover:shadow-[0_0_25px_rgba(126,34,206,0.4)] hover:border-primary transition-all duration-300"
-              >
-                <figure className="px-10 pt-10">
-                  <img src={product.icon} alt={product.name} className="rounded-xl w-16" />
-                </figure>
-                <div className="card-body flex flex-col h-full">
-                  <div className="flex justify-between items-start">
-                    <h2 className="card-title text-xl">{product.name}</h2>
-                    <div className={`badge ${
-                      product.tagType === 'new' ? 'badge-secondary' : 
-                      product.tagType === 'best seller' ? 'badge-accent' : 
-                      'badge-primary'
-                    } badge-outline uppercase text-[10px] font-bold`}>
-                      {product.tag}
-                    </div>
-                  </div>
-                  <p className="text-sm text-gray-500">{product.description}</p>
-                  <div className="divider my-1"></div>
-                  <ul className="text-xs space-y-2 text-gray-600">
-                    {product.features.map((f, i) => <li key={i} className="flex items-center gap-2">✅ {f}</li>)}
-                  </ul>
-                  <div className="mt-4">
-                    <span className="text-2xl font-bold">${product.price}</span>
-                    <span className="text-gray-400 text-sm"> / {product.period}</span>
-                  </div>
-                  <div className="card-actions mt-auto pt-4">
-                    {cart.some(item => item.id === product.id) ? (
-                      <button className="btn btn-disabled w-full bg-gray-100 text-gray-400">
-                        Added to Cart
-                      </button>
-                    ) : (
-                      <button className="btn btn-primary w-full text-white" onClick={() => handleAddToCart(product)}>
-                        Buy Now
-                      </button>
-                    )}
-                  </div>
-                </div>
-              </div>
+              <ProductCard 
+                key={product.id}
+                product={product}
+                isInCart={cart.some(item => item.id === product.id)}
+                onAddToCart={handleAddToCart}
+              />
             ))}
           </div>
         ) : (
@@ -185,16 +231,11 @@ const App = () => {
             ) : (
               <div className="space-y-4">
                 {cart.map(item => (
-                  <div key={item.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border">
-                    <div className="flex items-center gap-4">
-                      <img src={item.icon} alt="" className="w-10" />
-                      <div>
-                        <h3 className="font-semibold">{item.name}</h3>
-                        <p className="text-xs text-gray-500">${item.price}</p>
-                      </div>
-                    </div>
-                    <button className="btn btn-sm btn-circle btn-outline btn-error" onClick={() => handleRemoveFromCart(item.id)}>✕</button>
-                  </div>
+                  <CartItem 
+                    key={item.id} 
+                    item={item} 
+                    onRemove={handleRemoveFromCart} 
+                  />
                 ))}
                 <div className="divider"></div>
                 <div className="flex justify-between items-center text-xl font-bold">
@@ -208,20 +249,8 @@ const App = () => {
         )}
       </main>
 
-      
-      <section className="bg-white py-20 mx-4 lg:mx-52 rounded-3xl">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-12">How It Works</h2>
-          <ul className="steps steps-vertical lg:steps-horizontal w-full">
-            <li className="step step-primary">Choose Tool</li>
-            <li className="step step-primary">Add to Cart</li>
-            <li className="step">Checkout</li>
-            <li className="step">Instant Access</li>
-          </ul>
-        </div>
-      </section>
+      <HowItWorks />
 
-      
       <section className="py-20 mx-4 lg:mx-52">
         <h2 className="text-3xl font-bold text-center mb-12">Simple Pricing Plans</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
